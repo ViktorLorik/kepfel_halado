@@ -17,15 +17,20 @@ absolutPathToImg = askopenfilename()
 
 try:
     data = pytesseract.image_to_data(Image.open(absolutPathToImg))
-    image = cv2.cv.LoadImage(absolutPathToImg)
-except Exception:
+    image = cv2.imread(absolutPathToImg)
+except Exception as e:
+    print(e)
     sys.exit("Invalid image")
 
 lines = data.split('\n')
 for i in range(1, len(lines)):
     cols = lines[i].split('\t')
 
-    confidence = int(cols[10])
+    if len(cols) > 1:
+        confidence = int(cols[10])
+    else:
+        confidence = 0
+
     if confidence <= 0:
         continue
 
